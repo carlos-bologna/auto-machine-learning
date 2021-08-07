@@ -1,0 +1,32 @@
+:root {
+    --datasheet-border: 1px solid black;
+}
+
+section {
+    margin: 1cm 0;
+}
+
+.datasheet-row {
+    border-bottom: var(--datasheet-border);
+    width: 100%;
+    margin: 0px;
+}
+
+.datasheet-row div {
+    padding: .5rem;
+    border-right: var(--datasheet-border)
+}
+
+.datasheet-row div:first-child {
+    border-left: var(--datasheet-border)
+}
+
+.datasheet-key {
+    background-color: #CCC;
+}
+
+.datasheet-header {
+    background-color: #999;
+    margin-top: 1rem;
+    border-top: var(--datasheet-border)
+}

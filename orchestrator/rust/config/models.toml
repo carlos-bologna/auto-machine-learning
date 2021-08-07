@@ -1,0 +1,17 @@
+[[models]]
+id="randomforest"
+name="Random Forest"
+image="rpa_random_forest"
+version="1.0"
+
+[[models]]
+id="lightgbm"
+name="LightGBM"
+image="rpa_lightgbm"
+version="1.0"
+
+[[models]]
+id="xgboost"
+name="XGBoost"
+image="rpa_xgboost"
+version="1.0"

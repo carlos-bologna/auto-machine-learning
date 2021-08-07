@@ -1,0 +1,22 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <title>Demostração API</title>
+</head>
+<body>
+<div class="jumbotron jumbotron-fluid">
+<div class="container">
+    <h1 class="display-4">API Demo</h1>
+    <p class="lead">Esta é uma demonstração do uso da API utilizando HTML. Visualize o código-fonte desta página em seu navegador, para visualizar o código HTML utilizado para consumir a API.</p>
+    <hr class="my-4">
+    <form method="POST" action="http://localhost:8080">
+        $form$
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+</div>
+</div>
+</body>
+</html>

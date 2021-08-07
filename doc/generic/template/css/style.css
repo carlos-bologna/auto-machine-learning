@@ -1,0 +1,64 @@
+body {
+    counter-reset: tables;
+    counter-reset: figures;
+}
+
+section {
+    margin: 1cm 0;
+}
+
+.unbreakable-on-print {
+    page-break-before: auto;
+    page-break-after: auto;
+    page-break-inside: avoid;
+    display: block;
+}
+
+.table .td-null {
+    text-align: center;
+}
+
+.table .td-null::before {
+    content: '-';
+}
+
+.table .td-bool {
+    display: flex;
+    justify-content: center;
+    page-break-before: auto;
+    page-break-after: auto;
+    page-break-inside: avoid;
+}
+
+.table .td-true::before {
+    content: url(true.svg);
+}
+
+.table .td-false::before {
+    content: url(false.svg);
+}
+
+.table .td-number {
+    text-align: right;
+}
+
+.table .th-col {
+    text-align: center;
+    white-space: nowrap;
+}
+
+.table {
+    counter-increment: tables;
+}
+
+.table caption::before {
+    content: "Tabela " counter(tables)": ";
+}
+
+.figure {
+    counter-increment: figures;
+}
+
+.figure figcaption::before {
+    content: "Figura " counter(figures)": ";
+}

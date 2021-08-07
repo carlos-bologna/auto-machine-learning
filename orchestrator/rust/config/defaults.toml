@@ -1,0 +1,10 @@
+[defaults]
+current_dir         = "home/"
+workdir             = "yyyy-mm-dd-HHhMM"
+database            = "data.csv"
+database_delimiter  = ","
+target_column       = "target"
+doc_image           = "rpa_doc:1.0"
+deploy_image        = "rpa_deploy:1.0"
+metric              = "roc_auc"
+project_name        = "awesome-name"

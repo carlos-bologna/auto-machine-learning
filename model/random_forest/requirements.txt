@@ -1,0 +1,6 @@
+pandas==1.1.0
+sklearn==0.0
+scorecardpy==0.1.9.2
+shap==0.36.0
+matplotlib==3.3.2
+scikit-learn==0.23.2

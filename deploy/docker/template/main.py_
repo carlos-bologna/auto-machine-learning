@@ -1,0 +1,48 @@
+import re
+import joblib
+from flask import request, render_template
+from flask_api import FlaskAPI, status
+from flask_httpauth import HTTPBasicAuth
+import pandas as pd
+
+app = FlaskAPI(__name__)
+auth = HTTPBasicAuth()
+
+#API SECURITY KEY
+USER_DATA           = {
+    "GHC76FUIbHVf476": "KJhbV65E4E65+980FGUH08UH5+6TD43s34ED8tyB08/JH98YGUHg67TD+D6FGY"
+}
+
+@auth.verify_password
+def verify(username, password):
+    if not (username and password):
+        return False
+    return USER_DATA.get(username) == password
+
+def get_model():
+    model = joblib.load('pipeline.pkl')
+    return model
+
+@app.route('/demo/')
+def demo():
+    return render_template('demo.html')
+
+@app.route("/", methods=['POST'])
+#@auth.login_required
+def main():
+
+    data = request.data
+    data_dict = {}
+    
+    for k, v in data.items():
+        data_dict[k] = v
+
+    df = pd.DataFrame.from_dict([data_dict]).astype($schema$)
+    
+    model = get_model()
+    outputs = model.predict_proba(df)
+    
+    return {'prob': str(outputs)}, status.HTTP_200_OK
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=5000, debug=True)

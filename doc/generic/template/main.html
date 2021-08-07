@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <script type="text/javascript" src="/ruxitagentjs_ICA2SVfqru_10203201116182134.js"
+        data-dtconfig="app=a496caa72c72afb7|cuc=4bzwd7ez|featureHash=ICA2SVfqru|dpvc=1|lastModification=1608751066722|vcv=2|dtVersion=10203201116182134|tp=500,50,0,1|rdnt=1|uxrgce=1|uxdcw=1500|vs=2|agentUri=/ruxitagentjs_ICA2SVfqru_10203201116182134.js|reportUrl=/rb_050dfda1-e7ed-4b27-af7d-fff3b69bfc14|rid=RID_-795628652|rpid=1330218871|domain=bradesco.com.br"></script>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <title>Documentação do Modelo</title>
+    <script src="js/plotly-latest.min.js"></script>
+    <script src="js/main.js"></script>
+</head>
+
+<body>
+
+    <div class="container">
+
+        <img src="img/logo.png" alt="logomarca" />
+
+        <hr />
+
+        <h1>Documentação do Modelo Preditivo</h1>
+
+        <h2>Sumário</h2>
+        <ul>
+            <li><a href="#base_de_dados">Base de Dado</a></li>
+            <li><a href="#analise_exploratoria">Análise Exploratória</a></li>
+            <li><a href="#tratamento_das_variaveis">Tratamento das Variáveis</a></li>
+            <li><a href="#resultados">Avaliação dos Resultados</a></li>
+            <li><a href="#deploy">Implantação (deploy)</a></li>
+        </ul>
+
+
+        <h2 id="base_de_dados">Base de Dado</h2>
+
+        <p>
+            Para este projeto, foi utilizado o banco de dados nomeado originalmente de <samp>$original-database$</samp>.
+            O alvo a ser estudado, isto é, a informação pela qual desejamos prever, corresponde ao campo chamado de
+            <samp>$original-target-column$</samp> do banco de dados.
+            O banco de dados em questão possui um total de $total-rows$ registros e $total-cols$ campos (ou variáveis).
+            Para o treinamento do modelo, foi utilizada a técnica de divisão do banco de dados em duas partes.
+            Uma destas partes não será utilizada no processo de construção do modelo, mas servirá somente para
+            avaliarmos a performance dele após o treinamento.
+            Esta porção corresponde a uma razão de $test-split-size$ dos registros do banco de dados.
+            Sendo assim, ao final da separação do banco de dados em dois, ficamos com $train-rows$ registros para treino
+            e $test-rows$ para teste.
+            Além disso, os valores da variável resposta foram transformados em rótulos numéricos de acordo com a
+            frequência de
+            ocorrência de cada valor, conforme tabela abaixo. Isso é feito para que tenhamos uma variável resposta no formato numérico e não como um nome.
+            Caso a base de dados já traga um alvo no formato numérico, nada munda e, neste caso, a tabela abaixo apresentará a mesma informação tanto para o espaço destinado ao "Rótulo"
+            como para o destinado ao "Valor Original".
+        </p>
+
+        <table class="table table-sm table-numbered">
+            <caption>Tratamento da variável alvo: <samp>$original-target-column$</samp></caption>
+            <thead>
+                <tr>
+                    <th scope="col" class="th-col"> Rótulo </th>
+                    <th scope="col" class="th-col"> Valor Original </th>
+                    <th scope="col" class="th-col"> Contagem </th>
+                    <th scope="col" class="th-col"> Frequência </th>
+                </tr>
+            </thead>
+            <tbody id="target-treatments-tbody">
+                <script>
+                    buildTargetTreatmentsTable($target-label$, $target-count$, $total-rows$)
+                </script>
+            </tbody>
+        </table>
+
+        <h2 id="analise_exploratoria">Análise Exploratória</h2>
+
+        <p>
+            A seguir, são apresentadas algumas informações que permitam descrever o perfil de cada variável.
+            Para cada variável, é apresentado seu nome e tipo, podendo ser numérico (NUM), categórico (CAT) ou booleano
+            (BOOL).
+            Além disso, é apresentado a quantidade de valores distintos e ausentes, junto com sua porcentagem em relação
+            ao total.
+            Para as variáveis numéricas, é apresentado também o maior e menor valor, a média e o desvio padrão.
+            Por fim, um histograma apresenta a distribuição dos valores de uma variável numérica.
+            Para as variáveis categóricas, é apresentado um gráfico de barras horizontais, apresentando a frequência de ocorrência dos principais valores.
+            Caso alguma variável apresente características peculiares, você ainda verá uma tag em amarelo, 
+            trazendo informações adicionais, tais como:
+            alta cardinalidade, valores ausentes, valores uniformemente distribuídos, valores zerados, e valores
+            únicos (distintos). 
+        </p>
+
+        <table class="table">
+            <tbody id="varialbe-profiling-div">
+                <!-- JavaScript generated content -->
+            </tbody>
+            <script>
+                buildVariableProfiling($variables-profiling$)
+                appendMessages($profiling-messages$)
+            </script>
+        </table>
+
+        <p>
+            Complementando o entendimento do perfil das variáveis, nas figuras abaixo é apresentada a correlação entre
+            as variáveis.
+            Para as variáveis numéricas foi calculada a correlação de Pearson.
+            A correlação de Pearson é uma medida de correlação linear entre duas variáveis numéricas.
+            Os seus valores variam entre -1 e 1, sendo -1 indicando uma correlação linear negativa, 0 indicando ausência
+            de correlação linear, e 1 uma correlação linear positiva.
+            Enquanto para as variáveis categóricas foi utilizada o V de Cramer.
+            O V de Cramer é uma medida de associação entre duas variáveis nominais.
+            Esta medida varia entre 0 e 1, sendo 1 um indicador de associação perfeita.
+        </p>
+
+        <figure class="unbreakable-on-print figure" id="variable-correlations-pearson">
+            <script>
+                plotCorrelation($variables-correlations$["pearson"], "pearson", [[0, '#900'], [0.5, '#999'], [1, '#009']], -1, 1)
+            </script>
+            <figcaption class="figure-caption">Correlação de Pearson entre as variáveis numéricas</figcaption>
+        </figure>
+
+        <figure class="unbreakable-on-print figure" id="variable-correlations-cramers">
+            <script>
+                plotCorrelation($variables-correlations$["cramers"], "cramers", [[0, '#999'], [1, '#009']], 0, 1)
+            </script>
+            <figcaption class="figure-caption">V de Cramer entre cada par de variáveis categóricas</figcaption>
+        </figure>
+
+        <h2 id="tratamento_das_variaveis">Tratamento de variáveis</h2>
+
+        <p>
+            Inicialmente as variáveis da base de dados $original-database$ foram transformadas, gerando novas variáveis.
+            Esse processamento é feito tendo em vista que as variáveis originais podem não ser adequadas para os
+            processos de aprendizagem de máquina.
+            Estas transformações incluem, em geral, o tratamento de variáveis categóricas e de texto, e também de
+            variáveis com valores ausentes ou inválidos.
+            Os tratamentos realizados nas variáveis foram:
+        <ul>
+            <li>
+                <p>
+                    <strong>Tratamento de valores ausentes ou inválidos:</strong>
+                    As variáveis com valores inválidos foram transformadas em duas.
+                    A primeira é uma cópia da variável, porém com os valores ausentes ou inválidos substituídos pela
+                    média.
+                    Este tratamento é referenciado na tabela abaixo como <samp>clean_copy</samp>, e a variável
+                    transformada leva o mesmo nome da variável original.
+                    A segunda variável criada é um marcador booleano representando que houve tratamento naquele
+                    registro, para aquela variável.
+                    Dependendo das características da base de dados, este marcador pode ser mais informativo do que a
+                    própria variável tratada.
+                    Este marcador leva o nome da variável original com o sufixo <samp>_is_bad</samp>, sendo este
+                    tratamento referenciado como <samp>missing_indicator</samp>.
+                </p>
+            </li>
+            <li>
+                <p>
+                    <strong>Tratamento de variáveis categóricas:</strong>
+                    As variáveis categóricas foram convertidas em indicadores booleanos para os valores mais frequentes.
+                    Ou seja, para cada valor comumente presente é criada uma nova variável, indicando se para um dado
+                    registro a variável original possui aquele valor.
+                    Este tratamento é referenciado na tabela abaixo como <samp>indicator_code</samp>.
+                    Por fim, a esta nova variável é dado o nome da variável original com o sufixo <samp>_lev_</samp>,
+                    seguido do valor categórico sendo indicado no marcador.
+                    Por exemplo, supondo que o valor <var>A</var> seja frequente na variável categórica <var>X</var>,
+                    então será criada uma nova variável, chamada <samp>X_lev_A</samp>.
+                    Nesta análise, foram considerados valores comuns, aqueles com frequência acima de <span
+                        id='indicator_min_fraction'>indicator_min_fraction</span>.
+                    Além destes indicadores, é criada uma nova variável indicando a frequência em que aquele valor é
+                    observado para aquela variável.
+                    Esta nova variável leva o nome da variável original seguido do sufixo <samp>_prevalence_code</samp>,
+                    sendo este tratamento também referenciado como <samp>prevalence_code</samp>.
+                    Além disso, foi criada também uma variável com o resultado de uma regressão logística,
+                    condicionado ao valor observado na variável original,
+                    referenciada na tabela abaixo como <samp>logit_code</samp>.
+                    Por fim, valores ausentes foram tratados como sendo da categoria <samp>_NA_</samp> (ausente),
+                    sendo então aplicados os mesmos tratamentos que para os demais valores categóricos.
+                    <script>
+                        document.getElementById('indicator_min_fraction').innerText = Math.round($indicator_min_fraction$ * 100) + "%"
+                    </script>
+                </p>
+            </li>
+        </ul>
+        </p>
+        <p>
+            A tabela abaixo mostra a lista das variáveis após o tratamento.
+            Para cada variável é apresentado o nome da variável transformada,
+            a variável original, qual foi o tratamento realizado,
+            a correlação de Pearson em relação ao alvo e o R-quadrado.
+            <span id="pearson-summary"></span>
+            <span id="r-squared-summary"></span>
+            <script>
+                writePearsonSummary($variable_treatments$)
+                writeRSquaredSummary($variable_treatments$)
+            </script>
+        </p>
+
+        <table class="table table-sm table-numbered">
+            <caption>Tratamento das variáveis</caption>
+            <thead>
+                <tr>
+                    <th scope="col" class="th-col"> Variável </th>
+                    <th scope="col" class="th-col"> Variável Original </th>
+                    <th scope="col" class="th-col"> Tratamento </th>
+                    <!-- <th scope="col" class="th-col"> Usou dados do alvo </th> -->
+                    <th scope="col" class="th-col"> Pearson </th>
+                    <th scope="col" class="th-col"> R-quadrado </th>
+                </tr>
+            </thead>
+            <tbody id="variable-treatments-tbody">
+                <!-- JavaScript generated table body (see main.js) -->
+                <script>
+                    buildTableFromVariableTreatmentData(
+                        $variable_treatments$,
+                        'variable-treatments-tbody',
+                        "orig_variable", "treatment", /* "y_aware",*/ "PearsonR", "R2"
+                    )
+                </script>
+            </tbody>
+        </table>
+
+        <p>
+            Foram recomendadas as variáveis que possuem variabilidade e que tenham significância abaixo do limiar
+            (conforme tabela abaixo).
+            Esta significância é estimada baseada em métodos lineares.
+            Porém, esta é uma recomendação conservadora de variáveis que parecem ser mais úteis.
+            O limiar de significância é calculado como <var>1/nt&times;T</var>.
+            No qual <var>nt</var> é o número de variáveis resultado do tratamento <var>t</var>, e <var>T</var> é o total
+            de tratamentos realizados.
+            Para variabilidade, foi considerada qualquer variável com valor não constante.
+            <span id="filter-to-recommended"></span>
+            <script>
+                filterToRecommendedSummary($variable_treatments$, "$filter_to_recommended$")
+            </script>
+        </p>
+
+        <table class="table table-sm table-numbered">
+            <caption>Seleção de variáveis</caption>
+            <thead>
+                <tr>
+                    <th scope="col" class="th-col">Variável</th>
+                    <th scope="col" class="th-col">Variabilidade</th>
+                    <th scope="col" class="th-col">Significância</th>
+                    <!-- <th scope="col" class="th-col">vcount</th> -->
+                    <th scope="col" class="th-col">Limiar</th>
+                    <th scope="col" class="th-col">Recomendação</th>
+                </tr>
+            </thead>
+            <tbody id="variable-selection-tbody">
+                <!-- JavaScript generated table body (see main.js) -->
+                <script>
+                    buildTableFromVariableTreatmentData(
+                        $variable_treatments$,
+                        'variable-selection-tbody',
+                        'has_range', 'significance', /* vcount,  */ 'default_threshold', 'recommended'
+                    )
+                </script>
+            </tbody>
+        </table>
+
+        <h2 id="resultados">Avaliação dos Resultados</h2>
+
+        <h3>Seleção do modelo</h3>
+        <p>
+            Nesta análise, foram avaliados diversos modelos, dentre eles, os <span id="models-qtd"></span> melhores, se compararmos a métrica de avaliação
+            $metric-id$ foram os seguintes:
+        </p>
+
+        <table id="table-models" class="table table-sm table-numbered">
+            <caption>Modelos avaliados</caption>
+            <thead>
+                <tr>
+                    <th>Modelo</th>
+                    <th>$metric-id$</th>
+                </tr>
+            </thead>
+            <tbody id="table-models-body">
+                <script>
+                    buildTableOfModels($model_rank$)
+                </script>
+            </tbody>
+        </table>
+
+        <p>
+            O melhor modelo avaliado foi o $$best_model_id$$.
+            A matriz de confusão para este modelo, na base de teste, é apresentada a seguir.
+        </p>
+
+        <figure id="chart-confusion-matrix" class="unbreakable-on-print figure">
+            <!-- JavaScript generated plot (main.js) -->
+            <script>
+                plotBinaryConfusionMatrix($cm-test$)
+            </script>
+            <figcaption class="figure-caption">Matriz de confusão do modelo <span id="model-name"></span> na base de
+                teste.</figcaption>
+        </figure>
+
+        <p>
+            O ajuste de hiperparâmetros dos modelos
+            foi feito utilizando busca aleatória com validação cruzada.
+            Os melhores hiperparâmetros encontrados para o modelo $$best_model_id$$ são apresentados na tabela a seguir.
+        </p>
+
+        <table id="table-params" class="table table-sm table-numbered">
+            <caption>Ajuste de hiperparâmetros</caption>
+            <thead>
+                <tr>
+                    <th>Hiperparâmetro</th>
+                    <th>Valor</th>
+                </tr>
+            </thead>
+            <tbody id="table-params-body">
+                <script>
+                    buildKeyValueTableBody($hyperparameters$, 'table-params-body')
+                </script>
+            </tbody>
+        </table>
+
+        <!--
+            <h3>Importância das Variáveis</h3>
+            <p>
+                Abaixo podemos visualizar o gráfico da importância das variáveis.
+                <span id='obs-number-of-variables'></span>
+            </p>
+
+            <figure id="chart-feature-importances" class="unbreakable-on-print figure">
+                <script>
+                    plotFeatureImportances($feature_importances$)
+                </script>
+                <figcaption class="figure-caption">Gráfico da importância das variáveis</figcaption>
+            </figure>
+        -->
+
+        <h3>Impacto das variáveis na saída do modelo</h3>
+        <p>
+            Também foi avaliado o Impacto das variáveis na saída do modelo, por meio da análise <em>SHAP value</em>.
+            O <em>SHAP value</em> pode ser usado para analisar o impacto geral das variáveis, apresentado na figura a
+            seguir.
+            Este gráfico é feito usando todos os dados da base de treino. Ele demonstra as seguintes informações:
+        <ul>
+            <li>
+                <strong> Importância da variável: </strong>
+                as variáveis são apresentadas em ordem decrescente de importância.
+            </li>
+            <li>
+                <strong> Impacto: </strong>
+                o eixo horizontal mostra se o efeito desse valor, para esta variável, está associado a uma previsão de
+                ocorrência da classe <samp>1</samp> (quando positivo)
+                ou da classe <samp>0</samp> (quando negativo).
+            </li>
+            <li>
+                <strong> Valor da variável: </strong>
+                a cor mostra se essa variável possui um valor alto (em vermelho) ou baixo (em azul) para aquela
+                observação.
+            </li>
+            <li>
+                <strong> Correlação: </strong>
+                É possível identificar, por exemplo, quando a variável possui um valor alto (vermelho) e tem um impacto
+                alto e positivo (eixo X) na ocorrência da classe <samp>1</samp>.
+                Da mesma forma, é possível identificar, por exemplo, quando uma variável está negativamente
+                correlacionada com a variável alvo.
+            </li>
+
+        </ul>
+        </p>
+        <figure id="char-feature-importances" class="unbreakable-on-print figure">
+            <img src="$shapvaluesummary-img$" alt="Análise geral do impacto das variáveis" width="60%"
+                class="align-center">
+            <figcaption class="figure-caption">Análise geral do impacto das variáveis</figcaption>
+        </figure>
+        <p>
+            O <em>SHAP value</em> pode também ser usado para analisar o impacto das variáveis em uma observação
+            específica.
+            Por exemplo, a figura a seguir mostra o impacto das variáveis na primeira amostra da base de treino.
+            O valor <samp>f(x)</samp> é o <em>logit</em> da probabilidade de a observação ser da classe <samp>1</samp>.
+            Enquanto o <samp>base value</samp> representa o <em>logit</em> da probabilidade média de uma observação ser
+            da classe <samp>1</samp>.
+            As variáveis representadas em vermelho, são aquelas que empurram o valor da predição para a direita (classe
+            <samp>1</samp>).
+            Enquanto as em azul são as que empurram o valor para a esquerda (classe <samp>0</samp>).
+        </p>
+        <figure id="char-feature-importances" class="unbreakable-on-print figure">
+            <img src="$shapvaluesample-img$" alt="Análise geral do impacto das variáveis" width="100%">
+            <figcaption class="figure-caption">Análise do impacto das variáveis em uma observação específica
+            </figcaption>
+        </figure>
+
+
+        <h2 id="deploy">Implantação (deploy)</h2>
+        <p>A etapa de deploy cria no computador ao qual o treinamento do modelo ocorreu, uma imagem Docker que abriga
+            todos os códigos necessários para a publicação do modelo gerado no formato de API (Application Programming
+            Interface).</p>
+        <p>A imagem gerada pode ser consumida diretamente através da execução da imagem Docker ou publicada em um
+            cluster Kubernetes, por exemplo.</p>
+        <p>Dentro desta imagem, também foi disponibilizada uma área de demonstração, aonde a API pode ser consumida para
+            testes.</p>
+        <p>Abaixo exibimos alguns comandos úteis que poderá ajudar nos testes e publicação do resultado final.</p>
+
+        <h3>Visualização da Imagem Docker</h3>
+        <p>Visualize a imagem criada no computador local digitando com o comando abaixo no prompt de comando do seu
+            sistema operacional:</p>
+        <pre>docker images</pre>
+        <p>Na lista de imagens, você deve encontrar uma imagem com o nome de $project-name$ cuja TAG é <i>latest</i></p>
+
+        <h3>Execução da Imagem Docker</h3>
+        <p>Ainda na tela de comandos do seu sistema operacional, execute o comando abaixo:</p>
+        <pre>docker run -p 127.0.0.1:8080:5000/tcp $project-name$</pre>
+
+        <h3>Demonstração da API</h3>
+        <p>Após ter executado a imagem com o comando acima, você terá acesso à página de demonstração, acessando o
+            seguinte endereço através do seu navegador de internet:
+        </p>
+        <pre><a href="http://localhost:8080/demo">http://localhost:8080/demo</a></pre>
+    </div>
+
+</body>
+
+</html>
